@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# NOTE: .env is intentionally TRACKED in this PRIVATE repo. PlayMCP/KakaoCloud builds
+# the image from the git source and offers no runtime env-var injection, so the
+# Dockerfile bakes `.env` (COPY .env) and app_server.main() loads it at startup. Keep
+# this repository private, scope the PAT to read-only, and rotate the Naver keys
+# regularly. If a platform with env/secret injection is used later, untrack .env
+# (git rm --cached .env), re-ignore it here, and drop `COPY .env` from the Dockerfile.

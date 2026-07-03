@@ -1,0 +1,47 @@
+[project]
+name = "report-guard-mcp"
+version = "0.1.0"
+description = "Report Guard (리포트 가드) — a remote Streamable HTTP MCP server that helps university students check reports before submission."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = [
+    "mcp>=1.2.0",
+    "starlette>=0.37",
+    "uvicorn>=0.30",
+    "httpx>=0.27",
+    "pydantic>=2.7",
+    "jsonschema>=4.21",
+    # Offline English word-level spell-check (MIT). Korean uses the online Naver
+    # speller; English uses this local dictionary so both languages are covered.
+    "pyspellchecker>=0.8",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "anyio>=4.0",
+]
+# Note: the online Naver speller is called directly via httpx (a core dependency),
+# so no extra package is required. The unmaintained `py-hanspell` package is NOT used
+# because its legacy setup.py no longer installs on modern pip.
+
+[project.scripts]
+report-guard = "report_guard.app_server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/report_guard"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.report_guard]
+# Server identity — kept here so name rules (no "kakao") are auditable in one place.
+server_name = "Report Guard"
